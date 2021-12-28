@@ -1,0 +1,77 @@
+//code node
+#include <Servo.h>
+Servo myservo1; 
+Servo myservo2; 
+ 
+int ir_in=2;  //ir will detect when train enter
+int ir_out=3; //ir will detect when train exit
+int buzz=9;   //buzzer alert for vehicle
+int led=8;   //when train crossing the gate led will glow
+
+int flag=0;
+int sens_flag=0;
+
+void setup() {
+  // put your setup code here, to run once:
+myservo1.attach(11);
+myservo2.attach(10);
+
+pinMode(ir_in,INPUT);
+pinMode(ir_out,INPUT);
+pinMode(buzz,OUTPUT);
+myservo1.write(0);
+myservo2.write(0);
+pinMode(led,OUTPUT);
+}
+void gateClose()
+{
+  if(flag==0)
+  {
+  digitalWrite(buzz,HIGH);
+  delay(1000);
+  myservo1.write(90);
+  myservo2.write(90);
+  digitalWrite(led,HIGH);
+  delay(1000);
+  digitalWrite(buzz,LOW);
+  flag=1;
+  }
+}
+void gateOpen()
+{
+  if(flag==1)
+  {
+  digitalWrite(led,LOW);
+  myservo1.write(0);
+  myservo2.write(0); 
+  delay(1000);
+  flag=0;
+  }
+}
+void trainEntry()
+{
+  if(digitalRead(ir_in)==HIGH && digitalRead(ir_out)==LOW)
+ {
+  gateClose();
+ }
+}
+void trainExit()
+{
+  if(digitalRead(ir_out)==HIGH && digitalRead(ir_in)==LOW)
+ {
+  if(sens_flag==0)
+  {
+    sens_flag=1;
+  }
+  } 
+  if(sens_flag==1 && digitalRead(ir_out)==HIGH && digitalRead(ir_in)==HIGH)
+  {
+  gateOpen();
+  sens_flag=0;
+  }
+}
+void loop() {
+  // put your main code here, to run repeatedly:
+trainEntry();
+trainExit();
+}
