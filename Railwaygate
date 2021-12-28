@@ -1,4 +1,3 @@
-//code node
 #include <Servo.h>
 Servo myservo1; 
 Servo myservo2; 
