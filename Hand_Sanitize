@@ -1,4 +1,4 @@
-
+//code node
 #define trigPin 3
 #define echoPin 2
 #define relay 4
